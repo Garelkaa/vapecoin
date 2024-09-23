@@ -25,6 +25,7 @@ class CustomUserManager(BaseUserManager):
 class Users(AbstractBaseUser):
     user_id_tg = models.BigIntegerField(unique=True, null=True, blank=True)  # Add unique=True here
     money = models.IntegerField(null=True, blank=True)
+    moneyhour = models.IntegerField(null=True, blank=True)
     energy = models.IntegerField(null=True, blank=True, default=1000)
     objects = CustomUserManager()
     REQUIRED_FIELDS = []
@@ -38,3 +39,20 @@ class Refferer(models.Model):
     ref_link = models.TextField(null=True, blank=True)
     ref_user_id = models.ForeignKey(Users, on_delete=models.CASCADE, null=True, blank=True, related_name='user_id_referal')
         
+        
+class DailyReward(models.Model):
+    day = models.IntegerField(null=True, blank=True)  # День (например, День 1, День 2 и т.д.)
+    reward = models.CharField(max_length=255, null=True, blank=True)  # Награда (например, монеты, предметы)
+    value = models.IntegerField(null=True, blank=True)  # Количество награды
+
+    def __str__(self):
+        return f'Награда за день {self.day}: {self.reward} ({self.value})'
+
+
+class UserRewardProgress(models.Model):
+    user = models.OneToOneField(Users, on_delete=models.CASCADE, null=True, blank=True)  # Пользователь
+    last_reward_date = models.DateField(null=True, blank=True)  # Дата последней награды
+    consecutive_days = models.IntegerField(null=True, blank=True,default=0)  # Количество подряд идущих дней с наградой
+
+    def __str__(self):
+        return f'Прогресс пользователя {self.user.username}'
