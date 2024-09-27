@@ -72,28 +72,30 @@
         </div>
         <div class="friends__list">
           <div class="friends__list-title">
-            Список друзей: <span>15</span>
+            Список друзей: <span>{{ refferals_count }}</span>
           </div>
           <ul>
-            <li>
-              <div class="friends__list-info">
-                <img src="{% static "img/user-photo.png" %}" alt="">
-                <span>Alexander</span>
-              </div>
-              <div class="friends__list-value">
-                <img src="{% static "img/coin.png" %}" alt="">
-                <span>+5 000</span>
-              </div>
-            </li>
+            {% for friend in refferals %}
+              <li>
+                <div class="friends__list-info">
+                  <img src="{{ friend.user_id.image }}" alt="">
+                  <span>{{ friend.user_id.username_tg }}</span>
+                </div>
+                <div class="friends__list-value">
+                  <img src="{% static "img/coin.png" %}" alt="">
+                  <span>+5 000</span>
+                </div>
+              </li>
+            {% endfor %}
           </ul>
         </div>
         <div class="friends__bottom">
-          <button class="friends__invite default-button default-button--gr">
+          <a href="https://t.me/share/url?url={{ reff_link }}&text=ПРИСОЕДИНЯЙСЯ%20КО%20МНЕ%20В%20VapeCoin" class="friends__invite default-button default-button--gr" style='text-decoration: none;'><button class="friends__invite default-button default-button--gr">
             Пригласить друга
-          </button>
+          </button></a>
           <button
             class="friends__copy default-button default-button--gr copy-node"
-            data-text="text for buffer"
+            data-text="{{ reff_link }}"
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M11.25 2.8125H3.375C2.44302 2.8125 1.6875 3.56802 1.6875 4.5V15.75C1.6875 16.682 2.44302 17.4375 3.375 17.4375H11.25C12.182 17.4375 12.9375 16.682 12.9375 15.75V4.5C12.9375 3.56802 12.182 2.8125 11.25 2.8125Z" fill="white"/>
@@ -221,6 +223,7 @@
       copyNode.addEventListener("click", () => {
         const text = copyNode.getAttribute("data-text")
         if (navigator.clipboard) navigator.clipboard.writeText(text)
+        alert("Success copied link");
       })
     }
   })

@@ -11,16 +11,14 @@ from users.models import DailyReward, UserRewardProgress, Users
 class MainView(TemplateView):
     template_name = 'index.html'
     
-    # Переопределяем метод для передачи дополнительных данных в шаблон
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_profile, created = Users.objects.get_or_create(pk=1)
         rewards = DailyReward.objects.all()
         user_progress, create = UserRewardProgress.objects.get_or_create(user=user_profile)
         
-        # Обновляем данные о наградах для пользователя
         for reward in rewards:
-            reward.checked = reward.day <= user_progress.consecutive_days  # Проверяем, получена ли награда
+            reward.checked = reward.day <= user_progress.consecutive_days
         context['rewards'] = rewards
         
         context['user_profile'] = user_profile
@@ -53,18 +51,14 @@ class UpdateDataPresentView(View):
         user_reward, created = UserRewardProgress.objects.get_or_create(user=user)
 
         today = timezone.now().date()
-
-        # Проверяем, если сегодня награда еще не была получена
+        
         if user_reward.last_reward_date != today:
-            # Увеличиваем серию и обновляем дату получения награды
             user_reward.consecutive_days = (user_reward.consecutive_days % 7) + 1
             user_reward.last_reward_date = today
 
-            # Рассчитываем награду на основе текущего дня
             next_day = user_reward.consecutive_days
             reward = DailyReward.objects.get(day=next_day)
 
-            # Логика выдачи награды пользователю
             user.money += reward.value
             user.save()
             user_reward.save()

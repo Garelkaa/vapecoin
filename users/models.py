@@ -27,6 +27,9 @@ class Users(AbstractBaseUser):
     money = models.IntegerField(null=True, blank=True)
     moneyhour = models.IntegerField(null=True, blank=True)
     energy = models.IntegerField(null=True, blank=True, default=1000)
+    username_tg = models.TextField(null=True, blank=True)
+    username_custom = models.TextField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
     objects = CustomUserManager()
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'user_id_tg'
