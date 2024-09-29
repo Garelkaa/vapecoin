@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
@@ -30,11 +31,36 @@ class Users(AbstractBaseUser):
     username_tg = models.TextField(null=True, blank=True)
     username_custom = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
+    stop_refill = models.BooleanField(default=False)
+    last_visit = models.DateTimeField(null=True, blank=True, default=timezone.now)
+
+    def update_money_on_visit(self):
+        now = timezone.now()  # Текущее время
+        
+        # Если last_visit не задано (например, первый визит)
+        if self.last_visit is None:
+            self.last_visit = now
+            self.save()  # Сохраняем первое посещение и выходим
+            return
+
+        # Вычисляем разницу во времени
+        time_delta = now - self.last_visit
+        hours_passed = int(time_delta.total_seconds() // 3600)  # Количество полных часов
+
+        # Если прошло больше или равно 1 часу
+        if hours_passed >= 1:
+            # Начисляем деньги
+            self.money += hours_passed * self.moneyhour
+            
+            # Обновляем время последнего визита
+            self.last_visit = now
+            self.save()
     objects = CustomUserManager()
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'user_id_tg'
     class Meta:
         db_table = "users"
+        
         
         
 class Refferer(models.Model):

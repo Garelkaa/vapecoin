@@ -19,17 +19,13 @@ class Tasks(models.Model):
     
 class TasksUser(models.Model):
     STATUS_CHOICES = [
-        ('done', 'done'),
-        ('checked', 'checked'),
+        ('checked', 'Checked'),
+        ('done', 'Done'),
     ]
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
-    task = models.ForeignKey(Tasks, on_delete=models.CASCADE)
-    status = models.CharField(max_length=9, choices=STATUS_CHOICES)
-    
-    def get_status_label(self):
-        if self.status == 'checked':
-            return 'get'
-        elif self.status == 'done':
-            return 'completed'
-        return 'start'
+
+    user = models.ForeignKey('users.Users', on_delete=models.CASCADE)
+    task = models.ForeignKey('tasks.Tasks', on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='new')
+
+
     

@@ -13,7 +13,14 @@ class MainView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # Получаем или создаем профиль пользователя
         user_profile, created = Users.objects.get_or_create(pk=1)
+        
+        # Обновляем прибыль на основе времени последнего визита
+        user_profile.update_money_on_visit()
+        
+        # Остальная логика
         rewards = DailyReward.objects.all()
         user_progress, create = UserRewardProgress.objects.get_or_create(user=user_profile)
         
@@ -23,6 +30,7 @@ class MainView(TemplateView):
         
         context['user_profile'] = user_profile
         return context
+
     
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -33,12 +41,34 @@ class UpdateUserDataView(View):
             data = json.loads(request.body)
             balance = int(data.get('balance'))
             user_profile, created = Users.objects.get_or_create(pk=1)
+            if user_profile.energy <= 0:
+                
+                return JsonResponse({'success': False, 'error':'Недостаточно энергии'}, status=500)
             user_profile.money += balance
+            user_profile.energy -= 1
             user_profile.save()
 
             return JsonResponse({'success': True})
 
         except (json.JSONDecodeError, TypeError, ValueError) as e:
+            print(e)
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+        
+        
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdateUserEnegryView(View):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            user_profile, created = Users.objects.get_or_create(pk=1)
+            
+            user_profile.energy += 1
+            user_profile.save()
+
+            return JsonResponse({'success': True})
+
+        except (json.JSONDecodeError, TypeError, ValueError) as e:
+            print(e)
             return JsonResponse({'success': False, 'error': str(e)}, status=400)
         
         
@@ -68,6 +98,14 @@ class UpdateDataPresentView(View):
     
 class LiquidView(TemplateView):
     template_name = 'liquid.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        user_profile, created = Users.objects.get_or_create(pk=1)
+        
+        context['user_profile'] = user_profile
+        return context
     
     
 class AccumulatorView(TemplateView):
