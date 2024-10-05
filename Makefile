@@ -1,6 +1,6 @@
 MANAGE = python manage.py
 SOURCE = src
-MAIN = sparkcoin
+MAIN = vapecoin
 
 PROJECT_DIR=$(shell pwd)
 WSGI_PORT=8000
@@ -9,7 +9,7 @@ run:
 	$(MANAGE) runserver 127.0.0.1:8000
 
 gunicorn-run:
-	gunicorn sparkcoin.wsgi:application -b 0.0.0.0:8000 --reload
+	gunicorn vapecoin.wsgi:application -b 0.0.0.0:8000 --reload
 
 migrations:
 	$(MANAGE) makemigrations --no-input
@@ -17,7 +17,7 @@ migrations:
 	$(MANAGE) collectstatic --clear --noinput
 
 	python fill_table.py
-	gunicorn sparkcoin.wsgi:application -b 0.0.0.0:8000 --reload
+	gunicorn vapecoin.wsgi:application -b 0.0.0.0:8000 --reload
 
 start-app:
 	cd $(SOURCE) && python manage.py startapp $(app)

@@ -15,10 +15,20 @@ Including another URLconf
 """
 from django.urls import path, include
 
+from vapecoin import settings
+
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('main/', include('main.urls')),
     path('friends/', include('friends.urls')),
     path('wallet/', include('wallet.urls')),
     path('tasks/', include('tasks.urls')),
     path('shop/', include('shop.urls')),
+    path('users/', include('users.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

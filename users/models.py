@@ -29,9 +29,7 @@ class Users(AbstractBaseUser):
     moneyhour = models.IntegerField(null=True, blank=True)
     energy = models.IntegerField(null=True, blank=True, default=1000)
     username_tg = models.TextField(null=True, blank=True)
-    username_custom = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
-    stop_refill = models.BooleanField(default=False)
     last_visit = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def update_money_on_visit(self):

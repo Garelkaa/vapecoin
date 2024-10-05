@@ -39,8 +39,8 @@ packaging==24.1
 pillow==10.3.0
 prompt_toolkit==3.0.47
 psycopg2-binary==2.9.9
-pydantic==2.8.2
-pydantic_core==2.20.1
+pydantic
+pydantic_core
 python-dateutil==2.9.0.post0
 redis==5.0.8
 requests==2.32.3

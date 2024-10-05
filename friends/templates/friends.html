@@ -33,7 +33,7 @@
                 <path d="M12 17V10" stroke="#A2ABBA" stroke-width="2"/>
               </svg>
               <div class="friends__hint-content friends__hint-center">
-                Получай <strong>5% прибыли</strong> с каждого приглашенного друга
+                Получай <strong>+5 000 монет</strong><br> за каждого приглашенного друга
               </div>
             </div>
             <div class="friends__picture">
@@ -55,7 +55,7 @@
                 <path d="M12 17V10" stroke="#A2ABBA" stroke-width="2"/>
               </svg>
               <div class="friends__hint-content friends__hint-right">
-                Получай <strong>+5 000 монет</strong><br> за каждого приглашенного друга
+                Получай <strong>5% прибыли</strong> с каждого приглашенного друга
               </div>
             </div>
             <div class="friends__picture">
@@ -192,14 +192,11 @@
   <div class="load">
     <div class="load__body">
       <div class="load__picture">
-        <img src="{% static "img/load-all.png" %}" alt="">
+        <img src="{% static "img/load-all.svg" %}" alt="">
         <div class="center-gradient"></div>
       </div>
       <div class="load__text">
         Vape Coin
-      </div>
-      <div class="load-smoke">
-        <img src="{% static "img/smoke.png" %}" alt="">
       </div>
     </div>
   </div>
@@ -223,7 +220,7 @@
       copyNode.addEventListener("click", () => {
         const text = copyNode.getAttribute("data-text")
         if (navigator.clipboard) navigator.clipboard.writeText(text)
-        alert("Success copied link");
+        alert("Ссылка успешно скопирована");
       })
     }
   })

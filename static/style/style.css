@@ -89,8 +89,7 @@ h1 {
 
 img {
   display: block;
-  width: 100%;
-  height: auto;
+  width: auto;
   object-fit: contain;
 }
 

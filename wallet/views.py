@@ -10,7 +10,7 @@ class WalletView(TemplateView):
     
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context =  super().get_context_data(**kwargs)
-        user = Users.objects.get(pk=1)
+        user = Users.objects.get(pk=self.request.user.id)
         context['user'] = user
         return context
         

@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
-DATABASE_URL = 'postgresql+asyncpg://postgres:1111@postgres-db/spark'
+DATABASE_URL = 'postgresql+asyncpg://postgres:1111@postgres-db/vapecoin'
 engine = create_async_engine(DATABASE_URL, echo=False)
 
 Base = declarative_base()
@@ -22,10 +22,11 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     user_id_tg = Column(BigInteger, primary_key=True)
     username_tg = Column(String)
-    balance = Column(Integer)
-    bonus_index = Column(Integer)
+    money = Column(Integer)
+    energy = Column(Integer)
     password = Column(String(128))
     image = Column(String)
+    moneyhour = Column(Integer)
     
     
 class Refferer(Base):

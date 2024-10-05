@@ -11,7 +11,7 @@ class DBUsers:
     async def add_user(self, user_id: int, username_tg: str, password: str):
         async with self.session.begin():
             try:
-                new_user = User(user_id_tg=user_id, balance=0, image=f'media/{user_id}.jpg', bonus_index=0, username_tg=username_tg, password=password)
+                new_user = User(user_id_tg=user_id, energy=100, money=0, moneyhour=0, image=f'media/{user_id}.jpg', username_tg=username_tg, password=password)
                 self.session.add(new_user)
                 await self.session.commit()
             except Exception as e:

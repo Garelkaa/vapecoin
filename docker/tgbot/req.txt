@@ -18,6 +18,3 @@ pydantic_core==2.20.1
 SQLAlchemy==2.0.31
 typing_extensions==4.12.2
 yarl==1.9.4
-fastapi==0.115.0
-pydantic==2.5.1
-uvicorn==0.30.1

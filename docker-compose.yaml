@@ -6,7 +6,7 @@ services:
     image: postgres:16
     container_name: postgres
     environment:
-      POSTGRES_DB: spark
+      POSTGRES_DB: vapecoin
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1111
 
@@ -20,8 +20,8 @@ services:
       - postgres-db
     env_file: .env
     volumes:
-      - static_volume:/usr/src/sparkcoin/static/
-      - media_volume:/usr/src/sparkcoin/media/
+      - static_volume:/usr/src/vapecoin/static/
+      - media_volume:/usr/src/vapecoin/media/
 
   nginx:
     restart: always
@@ -29,8 +29,8 @@ services:
       context: ./docker/nginx/.
     container_name: nginx
     volumes:
-      - static_volume:/usr/src/sparkcoin/static/
-      - media_volume:/usr/src/sparkcoin/media/
+      - static_volume:/usr/src/vapecoin/static/
+      - media_volume:/usr/src/vapecoin/media/
     ports:
       - '443:443'
 
@@ -42,6 +42,9 @@ services:
     env_file: .env
     depends_on:
       - web
+    volumes:
+      - media_volume:/usr/src/vapecoin/media/
+
 volumes:
   static_volume:
   media_volume:

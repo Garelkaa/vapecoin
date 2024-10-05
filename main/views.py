@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.views.generic.base import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from users.models import DailyReward, UserRewardProgress, Users
+from users.models import DailyReward, Refferer, UserRewardProgress, Users
 
 class MainView(TemplateView):
     template_name = 'index.html'
@@ -15,7 +15,7 @@ class MainView(TemplateView):
         context = super().get_context_data(**kwargs)
         
         # Получаем или создаем профиль пользователя
-        user_profile, created = Users.objects.get_or_create(pk=1)
+        user_profile, created = Users.objects.get_or_create(pk=self.request.user.id)
         
         # Обновляем прибыль на основе времени последнего визита
         user_profile.update_money_on_visit()
@@ -40,7 +40,7 @@ class UpdateUserDataView(View):
         try:
             data = json.loads(request.body)
             balance = int(data.get('balance'))
-            user_profile, created = Users.objects.get_or_create(pk=1)
+            user_profile, created = Users.objects.get_or_create(pk=request.user.id)
             if user_profile.energy <= 0:
                 
                 return JsonResponse({'success': False, 'error':'Недостаточно энергии'}, status=500)
@@ -60,7 +60,7 @@ class UpdateUserEnegryView(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            user_profile, created = Users.objects.get_or_create(pk=1)
+            user_profile, created = Users.objects.get_or_create(pk=request.user.id)
             
             user_profile.energy += 1
             user_profile.save()
@@ -76,7 +76,7 @@ class UpdateUserEnegryView(View):
 class UpdateDataPresentView(View):
 
     def post(self, request, *args, **kwargs):
-        user, created = Users.objects.get_or_create(pk=1)
+        user, created = Users.objects.get_or_create(pk=request.user.id)
 
         user_reward, created = UserRewardProgress.objects.get_or_create(user=user)
 
@@ -102,8 +102,10 @@ class LiquidView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        user_profile, created = Users.objects.get_or_create(pk=1)
+        user_profile, created = Users.objects.get_or_create(pk=self.request.user.id)
+        reff_link = Refferer.objects.filter(user_id=self.request.user.id).first().ref_link
         
+        context['reff_link'] = reff_link
         context['user_profile'] = user_profile
         return context
     
